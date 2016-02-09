@@ -1,0 +1,10 @@
+type LineType {
+  id: ID!
+  iccId: String
+  transatelId: String
+  msisdn: String
+}
+
+type Query {
+  line: LineType
+}

@@ -167,3 +167,102 @@ you can also modify the build script of the **package.json** file :
 ````
 "start": "babel src/server --out-dir build/server && webpack"
 ````
+
+
+# Step 2
+## Init a GraphQL server
+
+First of all we need to install new packages
+
+````
+npm i -S graphql graphql-relay express-graphql graphiql
+npm i --save-dev babel-preset-stage-0
+````
+
+NB : graphiql is a tool that provide a nice interface to test graphql query
+NB 2 : babel-preset-stage-0 is used to understand the updateSchema.js 
+
+Then create a file called schema.js in src/server/data/
+
+````
+import {
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLSchema
+} from 'graphql'
+
+import {
+    globalIdField
+} from 'graphql-relay'
+
+var LineType = new GraphQLObjectType({
+    name: 'LineType',
+    description: 'This represents a Line'
+    fields: {
+        id: globalIdField('LineType'),
+        iccId: {
+            type: GraphQLString,
+            resolve: (obj) => obj.iccId
+        },
+        ...
+    }
+});
+
+var GraphQLQuery = new GraphQLObjectType({
+    name: 'Query',
+    description: 'This is the root query'
+    fields: {
+        line: {
+            type: LineType,
+            resolve: () => { // Here retrieve data }
+        }
+    }
+});
+
+export var Schema = new GraphQLSchema({
+    query: GraphQLQuery
+});
+````
+
+We need to execute a tool, that will parse our schema and create two files schema.json and schema.graphql
+The schema.json file will be used later by Babel Relay Plugin
+
+Create a new directory **tools** and add the following file :
+
+````
+import fs from 'fs';
+import path from 'path';
+import { Schema }  from '../src/server/data/schema';
+import { graphql }  from 'graphql';
+import { introspectionQuery, printSchema } from 'graphql/utilities';
+
+// Save JSON of full schema introspection for Babel Relay Plugin to use
+(async () => {
+    var result = await (graphql(Schema, introspectionQuery));
+    if (result.errors) {
+        console.error(
+            'ERROR introspecting schema: ',
+            JSON.stringify(result.errors, null, 2)
+        );
+    } else {
+        fs.writeFileSync(
+            path.join(__dirname, '../src/server/data/schema.json'),
+            JSON.stringify(result, null, 2)
+        );
+    }
+})();
+
+// Save user readable type system shorthand of schema
+fs.writeFileSync(
+    path.join(__dirname, '../src/server/data/schema.graphql'),
+    printSchema(Schema)
+);
+
+````
+
+and modify the script part of the package.json file
+
+````
+"update-schema": "babel-node tools/updateSchema.js"
+````
+
