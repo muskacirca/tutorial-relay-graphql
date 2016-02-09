@@ -4,7 +4,7 @@
   "description": "graphql and relay dojo",
   "main": "build/server/server.js",
   "scripts": {
-    "build": "babel src/server --out-dir build && webpack",
+    "build": "babel src/server --out-dir build/server && webpack",
     "start": "node build/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
