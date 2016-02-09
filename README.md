@@ -26,7 +26,7 @@ We will need to modify the package.json file to add a new script that will build
   "name": "graphql_relay_app",
     ...
   "scripts": {
-    "build": "babel src --out-dir build",
+    "build": "babel src/server --out-dir build/server",
     ...
   },
   "dependencies": {
@@ -55,7 +55,7 @@ Modify the package.json file again to add a new script that will start our appli
 }
 ````
 
-Then run the follwinf command
+Then run the following command
 ````
 npm start
 ````
@@ -68,7 +68,8 @@ That's it ! Go to localhost:3000
 
 It all start with a little npm install
 ````
-npm i -S react react-dom fs
+npm i -S react react-dom
+npm i --save-dev babel-loader
 npm i --save-dev babel-preset-react
 ````
 
@@ -80,4 +81,80 @@ babel-preset-react will be used to understand react special syntax, we also need
 }
 ````
 
-fs will be used to read our new index.html
+Create a frontend directory in in your src folder and add the following files :
+
+*  src/frontend/components/LineViewer.js (our react component)
+
+````
+import React from 'react';
+import ReactDOM from 'react-dom'
+
+class LineViewer extends React.Component {
+
+    render() {
+        return  <div className="text-center">
+                    <h1>Hello React World !</h1>
+                </div>
+    }
+}
+
+export default LineViewer
+````
+
+* src/frontend/App.js
+
+````
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import LineViewer from './components/LineViewer'
+
+ReactDOM.render(<LineViewer />, document.getElementById('app'))
+````
+
+NB : This will add our LineViewer component to the html element with id app
+
+* src/frontend/index.html
+
+````
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relay and GraphQL</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="/bundle.js"></script>
+</body>
+</html>
+````
+
+We also need to make a link between the index.html file and the javascript applicvation. We do that by adding a script a the end of the body tag.
+For instance, we will use webpack to compile in es5 all our client code in a single file (bundle.js)
+
+Here is the webpack config (**webpack.config.js**)
+````
+module.exports = {
+  entry: "./src/frontend/App.js",
+  output: {
+    filename: "public/bundle.js"
+  },
+  module: {
+    loaders: [
+      {
+        exclude: /(node_modules)/,
+        loader: 'babel'
+      }
+    ]
+  }
+};
+````
+
+NB : it tells that our app client entry point is located in src/frontend/App.js. It also tells to transpile the code using babel
+NB2 : run webpack using **webpack** or **webpack --watch** command line
+
+you can also modify the build script of the **package.json** file :
+````
+"start": "babel src/server --out-dir build/server && webpack"
+````
