@@ -4,10 +4,6 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
