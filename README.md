@@ -8,11 +8,13 @@ npm install -S express
 ````
 
 We're gonna use babel to transpile our es6 javascript code to es5
+
 ````
 npm install --save-dev babel-cli babel-preset-es2015
 ````
 
 We need to create a .babelrc file that is the configuration file for babel. We tell him to use the es2015 presets and to ignore all files in the node_modules directory.
+
 ````
 {
   "presets": ["es2015"],
@@ -21,6 +23,7 @@ We need to create a .babelrc file that is the configuration file for babel. We t
 ````
 
 We will need to modify the package.json file to add a new script that will build our application
+
 ````
 {
   "name": "graphql_relay_app",
@@ -36,11 +39,13 @@ We will need to modify the package.json file to add a new script that will build
 ````
 
 Then just run the following command
+
 ````
 npm run build
 ````
 
 Modify the package.json file again to add a new script that will start our application
+
 ````
 {
   "name": "graphql_relay_app",
@@ -67,6 +72,7 @@ That's it ! Go to localhost:3000
 ## Add react baby
 
 It all start with a little npm install
+
 ````
 npm i -S react react-dom
 npm i --save-dev babel-loader
@@ -74,6 +80,7 @@ npm i --save-dev babel-preset-react
 ````
 
 babel-preset-react will be used to understand react special syntax, we also need to modify our .babelrc file
+
 ````
 {
   "presets": ["es2015", "react"],
@@ -134,6 +141,7 @@ We also need to make a link between the index.html file and the javascript appli
 For instance, we will use webpack to compile in es5 all our client code in a single file (bundle.js)
 
 Here is the webpack config (**webpack.config.js**)
+
 ````
 module.exports = {
   entry: "./src/frontend/App.js",
@@ -155,6 +163,7 @@ NB : it tells that our app client entry point is located in src/frontend/App.js.
 NB2 : run webpack using **webpack** or **webpack --watch** command line
 
 you can also modify the build script of the **package.json** file :
+
 ````
 "start": "babel src/server --out-dir build/server && webpack"
 ````
