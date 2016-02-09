@@ -1,0 +1,20 @@
+{
+  "name": "graphql_relay_app",
+  "version": "0.0.1",
+  "description": "graphql and relay dojo",
+  "main": "lib/server/server.js",
+  "scripts": {
+    "build": "babel src --out-dir build",
+    "start": "node build/server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vincent.truchot",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
