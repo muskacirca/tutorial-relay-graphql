@@ -61,3 +61,23 @@ npm start
 ````
 
 That's it ! Go to localhost:3000
+
+
+# Step 1
+## Add react baby
+
+It all start with a little npm install
+````
+npm i -S react react-dom fs
+npm i --save-dev babel-preset-react
+````
+
+babel-preset-react will be used to understand react special syntax, we also need to modify our .babelrc file
+````
+{
+  "presets": ["es2015", "react"],
+  "ignore": ["/node_modules/"]
+}
+````
+
+fs will be used to read our new index.html
